@@ -1,0 +1,631 @@
+package com.sample
+ 
+import com.sample.GUI;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+declare Question
+  quest : String
+  answers : String
+  userAnswered : String 
+end
+
+declare GUI_state
+  currentQuestion : String = "Are you ready to start?"
+  possible: String = ""
+  ans : String = ""
+  img : String = ""
+end
+rule "Initialization"
+when
+	ui : GUI()
+then
+	GUI_state state = new GUI_state();
+	insert(state);
+	Question q = new Question("How old are you?", "0-5;6-12;13+","None");
+  	insert(q);
+  	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "age_0-5" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="How old are you?", ans=="0-5");
+	ui: GUI();
+then
+	Question q = new Question("Are you really doing this quiz? IMPRESIVE! Do your parents want you to be a child prodigy?","Yes!;No, I'm happy just to play","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "child_prodigy_yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you really doing this quiz? IMPRESIVE! Do your parents want you to be a child prodigy?",ans == "Yes!");
+	ui: GUI()
+then
+	System.out.println("Violin");
+	state.setImg("src/main/resources/grafiki/violin.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "age_6-12" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="How old are you?", ans=="6-12");
+	ui: GUI();
+then
+	Question q = new Question("Are you prepared to put in a lot of practice?","Yes;No i just want to get playing asap","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "practice" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Are you really doing this quiz? IMPRESIVE! Do your parents want you to be a child prodigy?", ans=="No, I'm happy just to play");
+	ui: GUI();
+then
+	Question q = new Question("Are you prepared to put in a lot of practice?","Yes;No i just want to get playing asap","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "lot_of_practice" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you prepared to put in a lot of practice?",ans == "Yes");
+	ui: GUI()
+then
+	System.out.println("piano");
+	state.setImg("src/main/resources/grafiki/piano.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "no_practice" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Are you prepared to put in a lot of practice?", ans=="No i just want to get playing asap");
+	ui: GUI();
+then
+	Question q = new Question("Do you want to drive your family mad?","Wouldnt i just;Im not a brat!","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "mad_family" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want to drive your family mad?",ans == "Wouldnt i just");
+	ui: GUI()
+then
+	System.out.println("recorder");
+	state.setImg("src/main/resources/grafiki/recorder.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "sane_family" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you want to drive your family mad?", ans=="Im not a brat!");
+	ui: GUI();
+then
+	Question q = new Question("Do you have a big house?","I live in a church;Theres plenty of room;its more compact and bijou","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "church_house" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you have a big house?",ans == "I live in a church");
+	ui: GUI()
+then
+	System.out.println("organ");
+	state.setImg("src/main/resources/grafiki/organ.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "plenty_of_room" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you have a big house?", ans=="Theres plenty of room");
+	ui: GUI();
+then
+	Question q = new Question("Do you want to play in an orchestra?","Too many people too much noise;My life is like a symphony;Only if its baroque","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "too_much_is_too_much" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want to play in an orchestra?",ans == "Too many people too much noise");
+	ui: GUI()
+then
+	System.out.println("piano");
+	state.setImg("src/main/resources/grafiki/piano.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "symphony_life" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you want to play in an orchestra?", ans=="My life is like a symphony");
+	ui: GUI();
+then
+	Question q = new Question("Do you enjoy lifting heavy weights?","Im often mistaken for superman;Im not a wimp but","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "superman_man" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you enjoy lifting heavy weights?", ans=="Im often mistaken for superman");
+	ui: GUI();
+then
+	Question q = new Question("Do you fancy a bit of jazz on the side?","Jazz isnt music its noise;Sure thing cat!","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "yay_jazz" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you fancy a bit of jazz on the side?",ans == "Sure thing cat!");
+	ui: GUI()
+then
+	System.out.println("Double bass");
+	state.setImg("src/main/resources/grafiki/double bass.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "ew_jazz" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you fancy a bit of jazz on the side?",ans == "Jazz isnt music its noise");
+	ui: GUI()
+then
+	System.out.println("Tuba");
+	state.setImg("src/main/resources/grafiki/tuba.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "weak_limbs" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you enjoy lifting heavy weights?", ans=="Im not a wimp but");
+	ui: GUI();
+then
+	Question q = new Question("Do you have an aversion to spit or condensation?","music above hygiene;yuck I prefer staying dry","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "bad_hygiene" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you have an aversion to spit or condensation?", ans=="music above hygiene");
+	ui: GUI();
+then
+	Question q = new Question("Do you want a challenge?","lifes too short;i like a challenge;bring it on, give me a real challenge","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "bad_hygiene_challenge" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want a challenge?",ans == "bring it on, give me a real challenge");
+	ui: GUI()
+then
+	System.out.println("Oboe");
+	state.setImg("src/main/resources/grafiki/oboe-icon.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "fagot_challenge" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want a challenge?",ans == "i like a challenge");
+	ui: GUI()
+then
+	System.out.println("Basoon");
+	state.setImg("src/main/resources/grafiki/basoon.png");
+	ui.closeGUI(state.getImg());
+end
+
+rule "easy_dirty" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you want a challenge?", ans=="lifes too short");
+	ui: GUI();
+then
+	Question q = new Question("Do you mind fiddling about with reeds?","that sounds like way too much hassle;i love frustrating manual tasks","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "no_reeds" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you mind fiddling about with reeds?", ans=="that sounds like way too much hassle");
+	ui: GUI();
+then
+	Question q = new Question("Loud and bold or sofr and elegant?","LOUDER!!!;elegant, please","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "reedless_LOUD" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Loud and bold or sofr and elegant?",ans == "LOUDER!!!");
+	ui: GUI()
+then
+	System.out.println("Trumpet");
+	state.setImg("src/main/resources/grafiki/trumpet.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "reedless_soft" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Loud and bold or sofr and elegant?",ans == "elegant, please");
+	ui: GUI()
+then
+	System.out.println("Flute");
+	state.setImg("src/main/resources/grafiki/flute.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "reedy" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you mind fiddling about with reeds?", ans=="i love frustrating manual tasks");
+	ui: GUI();
+then
+	Question q = new Question("Do you want to moonlight in an 80s cover band?","if i get my own solo;definitely not","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "80s_no" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want to moonlight in an 80s cover band?",ans == "definitely not");
+	ui: GUI()
+then
+	System.out.println("clarinet");
+	state.setImg("src/main/resources/grafiki/clarinet.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "80s_yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want to moonlight in an 80s cover band?",ans == "if i get my own solo");
+	ui: GUI()
+then
+	System.out.println("Saxophone");
+	state.setImg("src/main/resources/grafiki/saxophone.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "clean_musician" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you have an aversion to spit or condensation?", ans=="yuck I prefer staying dry");
+	ui: GUI();
+then
+	Question q = new Question("Do you mind being the butt of peoples jokes?","goodness no im terribly sensitive;i love a good laugh","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "me_no_laugh" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you mind being the butt of peoples jokes?",ans == "goodness no im terribly sensitive");
+	ui: GUI()
+then
+	System.out.println("cello");
+	state.setImg("src/main/resources/grafiki/cello.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "nobody_likes_me" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you mind being the butt of peoples jokes?",ans == "i love a good laugh");
+	ui: GUI()
+then
+	System.out.println("viola");
+	state.setImg("src/main/resources/grafiki/viola.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "Baroque_supremacy" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you want to play in an orchestra?", ans=="Only if its baroque");
+	ui: GUI();
+then
+	Question q = new Question("Dast thou wish to sit or stand?","Sitteth;Standeth","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "Sitteth_queen" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Dast thou wish to sit or stand?",ans == "Sitteth");
+	ui: GUI()
+then
+	System.out.println("lute");
+	state.setImg("src/main/resources/grafiki/lute.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "Standeth_king" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Dast thou wish to sit or stand?",ans == "Standeth");
+	ui: GUI()
+then
+	System.out.println("harpsichord");
+	state.setImg("src/main/resources/grafiki/harpsichord.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+
+rule "smol_house" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you have a big house?", ans=="its more compact and bijou");
+	ui: GUI();
+then
+	Question q = new Question("Do you hate your neighbours?","with passion;No theyre quite nice","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "nice_neighbours" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you hate your neighbours?", ans=="No theyre quite nice");
+	ui: GUI();
+then
+	Question q = new Question("Do you like folk music?","I always wear flowers in my hair;Im not a hippy","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "no_to_folklor" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you like folk music?",ans == "Im not a hippy");
+	ui: GUI()
+then
+	System.out.println("digital piano");
+	state.setImg("src/main/resources/grafiki/digital piano.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "yes_to_folklor" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you like folk music?",ans == "I always wear flowers in my hair");
+	ui: GUI()
+then
+	System.out.println("Acoustic guitar");
+	state.setImg("src/main/resources/grafiki/acoustic guitar.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "kill_neighbours" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you hate your neighbours?", ans=="with passion");
+	ui: GUI();
+then
+	Question q = new Question("Do you have a good sense of rythm and timing?","im a human metronome;its ok i guess","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "human_metronome" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you have a good sense of rythm and timing?",ans == "im a human metronome");
+	ui: GUI()
+then
+	System.out.println("percussion");
+	state.setImg("src/main/resources/grafiki/percussion.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "less_human_metronome" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you have a good sense of rythm and timing?",ans == "its ok i guess");
+	ui: GUI()
+then
+	System.out.println("trombone");
+	state.setImg("src/main/resources/grafiki/trombone.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "age_13+" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="How old are you?", ans=="13+");
+	ui: GUI();
+then
+	Question q = new Question("Do you have unlimited time, lots of money and a van?","Yes, ive also got a chauffeur;not really","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "chauffeur" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you have unlimited time, lots of money and a van?",ans == "Yes, ive also got a chauffeur");
+	ui: GUI()
+then
+	System.out.println("Harp");
+	state.setImg("src/main/resources/grafiki/harp.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "poor_13+" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you have unlimited time, lots of money and a van?", ans=="not really");
+	ui: GUI();
+then
+	Question q = new Question("Do you consider yourself to have musical ability?","yes, im amazing;not an IOTA;i have some","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "tone_deaf" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you consider yourself to have musical ability?",ans == "not an IOTA");
+	ui: GUI()
+then
+	System.out.println("xd");
+	state.setImg("src/main/resources/grafiki/wtf.png");
+	ui.closeGUI(state.getImg());
+end
+
+rule "weak_lips" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you consider yourself to have musical ability?", ans=="yes, im amazing");
+	ui: GUI();
+then
+	Question q = new Question("Do you have nerves and an upper lip of steel?","not quite;that sounds just like me","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "music_prodigy" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you have nerves and an upper lip of steel?",ans == "not quite");
+	ui: GUI()
+then
+	System.out.println("piano");
+	state.setImg("src/main/resources/grafiki/piano.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "lip_of_steel" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you have nerves and an upper lip of steel?",ans == "that sounds just like me");
+	ui: GUI()
+then
+	System.out.println("french horn");
+	state.setImg("src/main/resources/grafiki/french horn.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "musically_average" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you consider yourself to have musical ability?", ans=="i have some");
+	ui: GUI();
+then
+	Question q = new Question("Fancy youself as a composer?","Yes roll over Beethoven;not particularly","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "next_big_composer" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Fancy youself as a composer?", ans=="Yes roll over Beethoven");
+	ui: GUI();
+then
+	Question q = new Question("Are you more Mozart or more mmcartney?","Mozart;Mccarney","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "classical_fanboy" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you more Mozart or more mmcartney?",ans == "Mozart");
+	ui: GUI()
+then
+	System.out.println("piano");
+	state.setImg("src/main/resources/grafiki/piano.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "Mccartney_fanboy" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you more Mozart or more mmcartney?",ans == "Mccarney");
+	ui: GUI()
+then
+	System.out.println("acoustic guitar");
+	state.setImg("src/main/resources/grafiki/acoustic guitar.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "just_player_not_composer" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Fancy youself as a composer?", ans=="not particularly");
+	ui: GUI();
+then
+	Question q = new Question("Do you want to be centre of attention?","yes Im gonna be a star;not really im a team player","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "soloist" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Do you want to be centre of attention?",ans == "yes Im gonna be a star");
+	ui: GUI()
+then
+	System.out.println("piano");
+	state.setImg("src/main/resources/grafiki/piano.jpg");
+	ui.closeGUI(state.getImg());
+end
+
+rule "team_player" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Do you want to be centre of attention?", ans=="not really im a team player");
+	ui: GUI();
+then
+	Question q = new Question("Do you have a big house?","I live in a church;Theres plenty of room;its more compact and bijou","None");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+
+rule "Retrieve answer" //at the end of drl file
+when
+	state : GUI_state()
+	answer : String()
+	q: Question(quest == state.getCurrentQuestion())
+then
+System.out.println(state.getCurrentQuestion());
+	state.setAns(answer);
+	q.setUserAnswered(answer);
+	//q.setAns(answer);
+	update(state);
+	update(q);
+	//update(q);
+	retract(answer);
+	System.out.println(state.getAns());
+end
